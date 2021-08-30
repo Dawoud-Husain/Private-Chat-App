@@ -1,3 +1,5 @@
+// Navigation Bar Content 
+
 <template>
   <b-navbar toggleable="md" type="dark" variant="info" class="nav-bar">
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
