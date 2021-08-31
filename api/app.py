@@ -24,11 +24,18 @@ App Config
 app = Flask(__name__)
 
 pusher = pusher.Pusher(
-    app_id=os.getenv('PUSHER_APP_ID'),
-    key=os.getenv('PUSHER_KEY'),
-    secret=os.getenv('PUSHER_SECRET'),
-    cluster=os.getenv('PUSHER_CLUSTER'),
-    ssl=True)
+    # app_id=os.getenv('PUSHER_APP_ID'),
+    app_id= "1214203",
+    key= "c0910161aefffaec26d8",
+    secret= "acf2703d25caa6000f9e",
+    cluster= "us2", ssl=True)
+
+# pusher = pusher.Pusher(
+#     app_id=os.getenv('PUSHER_APP_ID'),
+#     key=os.getenv('PUSHER_KEY'),
+#     secret=os.getenv('PUSHER_SECRET'),
+#     cluster=os.getenv('PUSHER_CLUSTER'),
+#     ssl=True)
 
 app.config['JWT_SECRET_KEY'] = 'something-super-secret'  # Change this!
 jwt = JWTManager(app)
@@ -40,6 +47,7 @@ def index():
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
+
 
 @app.route('/api/register', methods=["POST"])
 def register():
@@ -61,6 +69,7 @@ def register():
         "status": "success",
         "message": "User added successfully"
     }), 201
+
 
 
 @app.route('/api/login', methods=["POST"])
@@ -165,7 +174,7 @@ def send_message():
         "to_user": to_user,
         "message": message,
         "channel": channel,
-        "sentiment": getSentiment(message)
+        # "sentiment": getSentiment(message)
     }
 
     # Trigger an event to the other user
@@ -195,7 +204,7 @@ def user_messages(channel_id):
             "to_user": message.to_user,
             "channel_id": message.channel_id,
             "from_user": message.from_user,
-            "sentiment": getSentiment(message.message)
+            # "sentiment": getSentiment(message.message)
         }
         for message in messages
     ])
