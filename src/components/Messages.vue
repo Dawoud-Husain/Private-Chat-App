@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div v-for="(message, id) in messages" v-bind:key="id">
@@ -6,7 +7,7 @@
         v-bind:class="[
           message.from_user == active_chat
             ? 'to-message'
-            : 'from-message offset-md-7'
+            : 'from-message offset-md-7',
         ]"
       >
         {{ message.message }}
@@ -14,13 +15,14 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "Messages",
   props: {
     messages: Array,
-    active_chat: Number
-  }
+    active_chat: Number,
+  },
 };
 </script>
 <style>

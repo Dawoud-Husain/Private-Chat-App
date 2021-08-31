@@ -4,12 +4,11 @@
       v-model="message_input"
       type="text"
       placeholder="Enter your message"
-    
+       
       v-on:keyup.enter="send_message"
     >
     </b-form-input>
   </div>
-  <!-- v-on:keyup.enter.native="send_message" -->
 </template>
 
 <script>

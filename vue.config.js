@@ -1,3 +1,4 @@
+// Create a proxy to enable access of Flask endpoints on the vue app
 module.exports = {
   devServer: {
     proxy: {

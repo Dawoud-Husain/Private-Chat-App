@@ -24,7 +24,6 @@ App Config
 app = Flask(__name__)
 
 pusher = pusher.Pusher(
-    # app_id=os.getenv('PUSHER_APP_ID'),
     app_id= "1214203",
     key= "c0910161aefffaec26d8",
     secret= "acf2703d25caa6000f9e",
@@ -40,10 +39,19 @@ pusher = pusher.Pusher(
 app.config['JWT_SECRET_KEY'] = 'something-super-secret'  # Change this!
 jwt = JWTManager(app)
 
+
+"""
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+Endpoints
+"""
+# Default route (used to see if flask is working)
 @app.route('/')
 def index():
     return jsonify("Pong!")
 
+# Close the connetction to the database once an operation is complete 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
@@ -209,8 +217,6 @@ def user_messages(channel_id):
         for message in messages
     ])
 
-
-
-# run Flask app
+# Running Flask Applicatoin
 if __name__ == "__main__":
     app.run()
