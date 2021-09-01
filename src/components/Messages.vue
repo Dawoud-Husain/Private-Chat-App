@@ -25,6 +25,7 @@ export default {
   },
 };
 </script>
+
 <style>
 .from-message {
   background: #17a2b8;

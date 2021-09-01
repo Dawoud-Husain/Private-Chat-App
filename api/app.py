@@ -36,7 +36,8 @@ pusher = pusher.Pusher(
 #     cluster=os.getenv('PUSHER_CLUSTER'),
 #     ssl=True)
 
-app.config['JWT_SECRET_KEY'] = 'something-super-secret'  # Change this!
+# Configure flask_jwt_extended package to use Flask app config
+app.config['JWT_SECRET_KEY'] = 'something-super-secret'
 jwt = JWTManager(app)
 
 
@@ -44,7 +45,7 @@ jwt = JWTManager(app)
 *************************************************************************************************************
 *************************************************************************************************************
 *************************************************************************************************************
-Endpoints
+Default Endpoints/Routes
 """
 # Default route (used to see if flask is working)
 @app.route('/')
@@ -57,13 +58,22 @@ def shutdown_session(exception=None):
     db_session.remove()
 
 
+"""
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+Login Endpoints/Routes
+"""
+
+# Register route that will accept JSON objects containing new user details (username and password)
 @app.route('/api/register', methods=["POST"])
 def register():
     data = request.get_json()
     username = data.get("username")
     password = generate_password_hash(data.get("password"))
 
-    try:
+    # attempt to add the user to the database, and return a sucess/failure message
+    try:    
         new_user = User(username=username, password=password)
         db_session.add(new_user)
         db_session.commit()
@@ -79,7 +89,7 @@ def register():
     }), 201
 
 
-
+# Login route
 @app.route('/api/login', methods=["POST"])
 def login():
     data = request.get_json()

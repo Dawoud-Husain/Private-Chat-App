@@ -1,15 +1,14 @@
-// this app is devived into four componnets, users, messages,messageInput and
-navbar
-
 <template>
   <div id="app">
     <Login v-if="!authenticated" v-on:authenticated="setAuthenticated" />
+
     <b-container v-else>
       <NavBar :logged_user="logged_user_username" />
       <b-row class="main-area">
         <b-col cols="4" class="users">
           <Users :users="users" v-on:chat="chat" />
         </b-col>
+
         <b-col cols="8" class="messages-area">
           <div class="messages-main">
             <div v-if="!current_chat_channel" class="select-chat text-center">
@@ -19,13 +18,20 @@ navbar
               v-else
               :active_chat="active_chat_id"
               :messages="messages[current_chat_channel]"
+              v-on:send_message="send_message" 
             />
+
+            
           </div>
+
           <MessageInput v-on:send_message="send_message" />
+
+          
         </b-col>
       </b-row>
     </b-container>
   </div>
+  
 </template>
 
 <script>
@@ -58,6 +64,7 @@ export default {
       authenticated: false,
     };
   },
+
   methods: {
     async setAuthenticated(login_status, user_data) {
       // Update the states
@@ -115,7 +122,7 @@ export default {
 
             this.messages[data.channel].push({
               message: data.message,
-              sentiment: data.sentiment,
+              // sentiment: data.sentiment,
               from_user: data.from_user,
               to_user: data.to_user,
               channel: data.channel,
@@ -165,12 +172,21 @@ export default {
           this.current_chat_channel = response.data.channel_name;
 
           // Get messages on this channel
+
           this.getMessage(response.data.channel_name);
+
+          // auto update messages on interval
+          this.polling = setInterval(() => {this.getMessage(response.data.channel_name)}, 1000)
+          this.polling;
+
+          // this.getMessage(response.data.channel_name);
+
           var isSubscribed = pusher.channel(response.data.channel_name);
 
           if (!isSubscribed) {
             var channel = pusher.subscribe(response.data.channel_name);
             this.$set(this.messages, response.data.channel_name, []);
+
             channel.bind("new_message", (data) => {
               //Check if the current chat channel is where the message is comming from
               if (
@@ -186,7 +202,7 @@ export default {
 
               this.messages[response.data.channel_name].push({
                 message: data.message,
-                sentiment: data.sentiment,
+                // sentiment: data.sentiment,
                 from_user: data.from_user,
                 to_user: data.to_user,
                 channel: data.channel,
@@ -202,7 +218,7 @@ export default {
 
     send_message: function(message) {
       this.axios.post(
-        "/api/send_message",  
+        "/api/send_message",
         {
           from_user: this.logged_user_id,
           to_user: this.active_chat_id,
@@ -215,20 +231,6 @@ export default {
   },
 };
 </script>
-
-<!-- <style lang="scss"> -->
-// @import "~@/assets/scss/vendors/bootstrap-vue/index"; // @import
-"~@/assets/scss/vendors/bootstrap-vue/index"; // .messages-main { // overflow-y:
-scroll; // height: 90%; // } // users { // padding: 0px !important; // border:
-1px solid grey; // } // .no-margin { // margin: 0px; // } // .messages-area { //
-border: 1px solid grey; // padding: 0px !important; // max-height:
-calc(100vh-4em) !important; // } // .input-message { // height: 40px; // } //
-.active { // background: #17a2b8 !important; // border: #17a2b8 !important; // }
-// .main-area { // margin: 0px; // min-height: calc(100vh -5em) !important; // }
-// .loggged_user { // color: white; // } // #app { // font-family: Avenir,
-Helvetica, Arial, sans-serif; // -webkit-font-smoothing: antialiased; //
--moz-osx-font-smoothing: grayscale; // text-align: center; // color: #2c3e50; //
-margin-top: 60px; // }
 
 <style>
 .messages-main {
