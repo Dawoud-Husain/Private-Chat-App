@@ -35,6 +35,7 @@
 </template>
 
 <script>
+
 import MessageInput from "./components/MessageInput.vue";
 import Messages from "./components/Messages.vue";
 import NavBar from "./components/NavBar.vue";
