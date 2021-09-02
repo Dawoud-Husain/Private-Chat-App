@@ -1,6 +1,7 @@
 # Swift--Chat-2
 
 Author: Dawoud Husain
+
 Date: Aug 25 - 2021-present
 
 This one to one private chat web application featuring an SQL database for chat history, JWT login authentication 
