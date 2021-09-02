@@ -1,22 +1,16 @@
-# Flask==1.0.2
-# python-dotenv==0.8.2
-# pusher==2.0.1
-# SQLAlchemy==1.4.18
-# Flask-SQLAlchemy==2.1
-# Flask-JWT-Extended==3.13.0
-
 asn1crypto==0.24.0
 certifi==2018.8.24
 cffi==1.14.6
 chardet==3.0.4
+charset-normalizer==2.0.4
 Click==7.0
+colorama==0.4.4
 cryptography==3.4.8
 Flask==1.0.2
 Flask-JWT-Extended==3.13.0
-#Added
-SQLAlchemy==1.4.18
-#######
 Flask-SQLAlchemy==2.1
+greenlet==1.1.1
+gunicorn==20.1.0
 idna==2.7
 itsdangerous==0.24
 Jinja2==2.10
@@ -31,7 +25,7 @@ pyOpenSSL==18.0.0
 python-dotenv==0.8.2
 requests==2.19.1
 six==1.11.0
-SQLAlchemy==1.2.0
+SQLAlchemy==1.4.18
 textblob==0.15.1
 urllib3==1.23
 Werkzeug==0.14.1
