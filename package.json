@@ -1,6 +1,11 @@
 {
   "name": "swift--chat",
   "version": "0.1.0",
+  "config": {
+    "node-options": "--optimize_for_size --max_old_space_size=2560 --gc_interval=100",
+    "start": "ng serve --port $PORT --host 0.0.0.0 --disable-host-check",
+    "webpacker": "node --max_old_space_size=4096 node_modules/.bin/webpack-dev-server --progress --color --config config/webpack/development.js"
+  },
   "engines": {
     "node": "14.17.5",
     "npm": "6.14.14"
