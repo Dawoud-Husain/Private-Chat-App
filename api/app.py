@@ -21,7 +21,8 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, g
 App Config
 """
 
-app = Flask(__name__)
+# app = Flask(__name__)
+app = Flask(__name__, static_folder='C:\Users\dawou\Documents\PersonalCondingProjects\Swift--Chat-2\dist', static_url_path='/')
 
 pusher = pusher.Pusher(
     app_id= "1214203",
@@ -229,4 +230,5 @@ def user_messages(channel_id):
 
 # Running Flask Applicatoin
 if __name__ == "__main__":
-    app.run(host = '0.0.0.0')
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=port)
