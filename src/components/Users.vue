@@ -1,16 +1,19 @@
 <template>
   <div style="margin-top: 0px;">
+    <!-- Render all users -->
     <div v-for="(user, id) in users" v-bind:key="id">
       <div
         v-bind:class="[activeUser == user.id ? 'user active' : 'user']"
         v-on:click="chat(user.id)"
       >
         {{user.userName}}
+        <!-- Display has new message when the user gets a new message for someone they are not chatting with-->
         <span v-if="user.has_new_message" class="has_new_message">New message</span>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   name: "Users",
@@ -22,6 +25,8 @@ export default {
       activeUser: null
     };
   },
+
+  // Emit an event to app.vue to initilize chat for user
   methods: {
     chat: function(id) {
       this.activeUser = id;
@@ -30,16 +35,19 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .user {
   margin: 0px !important;
   padding: 10px 4px 10px 8px;
   border-bottom: 1px solid gray;
 }
+
 .active {
   background: #17a2b8;
   color: white;
 }
+
 .has_new_message {
   background-color: #17a2b8;
   border-radius: 4px;
@@ -51,4 +59,5 @@ export default {
   padding: 3px;
   font-weight: bolder;
 }
+
 </style>

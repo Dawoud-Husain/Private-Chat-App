@@ -1,5 +1,15 @@
 """
 *************************************************************************************************************
+Author: Dawoud Husain
+Date: September 3, 2021
+
+
+
+*************************************************************************************************************
+"""
+
+"""
+*************************************************************************************************************
 *************************************************************************************************************
 *************************************************************************************************************
 Imports
@@ -21,9 +31,11 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, g
 App Config
 """
 
-# app = Flask(__name__)
-app = Flask(__name__, static_folder='C:\Users\dawou\Documents\PersonalCondingProjects\Swift--Chat-2\dist', static_url_path='/')
 
+app = Flask(__name__)
+# app = Flask(__name__, static_folder='C:\Users\dawou\Documents\PersonalCondingProjects\Swift--Chat-2\dist', static_url_path='/')
+
+# Initilize Python Pusher libary
 pusher = pusher.Pusher(
     app_id= "1214203",
     key= "c0910161aefffaec26d8",
@@ -58,7 +70,6 @@ def index():
 def shutdown_session(exception=None):
     db_session.remove()
 
-
 """
 *************************************************************************************************************
 *************************************************************************************************************
@@ -66,7 +77,7 @@ def shutdown_session(exception=None):
 Login Endpoints/Routes
 """
 
-# Register route that will accept JSON objects containing new user details (username and password)
+# Register POST route that will accept JSON objects containing new user details (username and password)
 @app.route('/api/register', methods=["POST"])
 def register():
     data = request.get_json()
@@ -74,6 +85,7 @@ def register():
     password = generate_password_hash(data.get("password"))
 
     # attempt to add the user to the database, and return a sucess/failure message
+
     try:    
         new_user = User(username=username, password=password)
         db_session.add(new_user)
@@ -90,7 +102,7 @@ def register():
     }), 201
 
 
-# Login route
+# Login route accepts JSON objects containing user information and validates it
 @app.route('/api/login', methods=["POST"])
 def login():
     data = request.get_json()
@@ -117,10 +129,19 @@ def login():
         }
     }), 200
 
+"""
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+Chat Endpoints/Routes
+"""
 
+# Endpoint to generate a channel name for both users to communicate
 @app.route('/api/request_chat', methods=["POST"])
+# protect the route by checking the JWT token
 @jwt_required
 def request_chat():
+    # Get user ID of users
     request_data = request.get_json()
     from_user = request_data.get('from_user', '')
     to_user = request_data.get('to_user', '')
@@ -131,18 +152,19 @@ def request_chat():
     channel = Channel.query.filter(Channel.from_user.in_([from_user, to_user])) \
                            .filter(Channel.to_user.in_([from_user, to_user])) \
                            .first()
+    
+    # If channel does not exist, then generate a channel
     if not channel:
-        # Generate a channel...
         chat_channel = "private-chat_%s_%s" % (from_user, to_user)
-
         new_channel = Channel()
         new_channel.from_user = from_user
         new_channel.to_user = to_user
         new_channel.name = chat_channel
         db_session.add(new_channel)
         db_session.commit()
+
+    # Else Use the channel name stored on the database
     else:
-        # Use the channel name stored on the database
         chat_channel = channel.name
 
     data = {
@@ -158,7 +180,7 @@ def request_chat():
 
     return jsonify(data)
 
-
+# Authenticate Pusher Channel Subscription
 @app.route("/api/pusher/auth", methods=['POST'])
 @jwt_required
 def pusher_authentication():
@@ -172,7 +194,7 @@ def pusher_authentication():
 
     return jsonify(auth)
 
-
+# Send message accross users
 @app.route("/api/send_message", methods=["POST"])
 @jwt_required
 def send_message():
@@ -201,7 +223,7 @@ def send_message():
 
     return jsonify(message)
 
-
+# Get all users from database
 @app.route('/api/users')
 @jwt_required
 def users():
@@ -210,7 +232,7 @@ def users():
         [{"id": user.id, "userName": user.username} for user in users]
     ), 200
 
-
+# Get all messages in a particular channel
 @app.route('/api/get_message/<channel_id>')
 @jwt_required
 def user_messages(channel_id):
@@ -227,6 +249,13 @@ def user_messages(channel_id):
         }
         for message in messages
     ])
+
+"""
+*************************************************************************************************************
+*************************************************************************************************************
+*************************************************************************************************************
+Flask configuration
+"""
 
 # Running Flask Applicatoin
 if __name__ == "__main__":

@@ -4,13 +4,27 @@ Author: Dawoud Husain
 
 Date: Aug 25 - 2021-present
 
-This one to one private chat web application featuring an SQL database for chat history, JWT login authentication 
-and support for multiple users
+Overview:
 
-The front end of the app is built using vue.js and the backend is built with python's flask framework. The application uses an API called pusher allowing for the real-time data transfer between servers and clients.
+    This one to one private chat web application featuring an SQL database for chat history, JWT login authentication 
+    and support for multiple users
 
-Front End Information
+    The front end of the app is built using vue.js and the backend is built with python's flask framework. The application uses an API called pusher allowing for the real-time data transfer between servers and clients.
 
+Backround: 
+    Especially with recent events such as COVID pendemic, the utalization of digital communication meathods is rapidly increasing. By making a lightweight chat webapplication, it will allow individuals using any device such as computers, laptops, phones and tablets to communicate while running any browser or operating system
+
+
+Why Use Flask/VUE combinarion
+    Flask is a very powerful micro web framework and is very simple yet flexiable
+
+    Vue is a very powerful opensource javaScript framework and addopts some of the best practices from React and Angular. It will provide all the necessary tools needed to create modern applications
+
+    With these language chices, it will allow for easy expansion and 
+
+--------------------------------------------------------------------------------
+
+Front End Information:
     The vue app consists of four components, it is housed in the App.vue file
         - Users: responsible for listing all of the regesterd users 
         - Messages: renders messages

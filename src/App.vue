@@ -1,8 +1,14 @@
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 <template>
   <div id="app">
+    <!-- Check to see if the user is authenticated, if not render the login component -->
     <Login v-if="!authenticated" v-on:authenticated="setAuthenticated" />
 
-    <b-container v-else>
+    
+    <b-container fluid v-else>
       <NavBar :logged_user="logged_user_username" />
       <b-row class="main-area">
         <b-col cols="4" class="users">
@@ -19,14 +25,9 @@
               :active_chat="active_chat_id"
               :messages="messages[current_chat_channel]"
               v-on:send_message="send_message" 
-            />
-
-            
+            />           
           </div>
-
           <MessageInput v-on:send_message="send_message" />
-
-          
         </b-col>
       </b-row>
     </b-container>
@@ -36,14 +37,18 @@
 
 <script>
 
+// Import app components and libaries
 import MessageInput from "./components/MessageInput.vue";
 import Messages from "./components/Messages.vue";
 import NavBar from "./components/NavBar.vue";
 import Login from "./components/Login.vue";
 import Users from "./components/Users.vue";
 import Pusher from "pusher-js";
+
 // Declare pusher variable so it's global to this file.
 let pusher;
+
+// Regester the components
 export default {
   name: "app",
   components: {
@@ -56,6 +61,8 @@ export default {
   data: function() {
     return {
       messages: {},
+
+      // User array
       users: [],
       active_chat_id: null,
       active_chat_index: null,
@@ -67,6 +74,9 @@ export default {
   },
 
   methods: {
+
+    // Function accepts information passed along when emmiting the authenticated event in Login.vue
+
     async setAuthenticated(login_status, user_data) {
       // Update the states
       this.logged_user_id = user_data.id;
@@ -98,6 +108,8 @@ export default {
         `private-notification_user_${this.logged_user_id}`
       );
 
+
+      // Initilize the pusher javascript livary
       notifications.bind("new_chat", (data) => {
         const isSubscribed = pusher.channel(data.channel_name);
         if (!isSubscribed) {
@@ -176,7 +188,7 @@ export default {
 
           this.getMessage(response.data.channel_name);
 
-          // auto update messages on interval
+          // auto update messages on interval every second 
           this.polling = setInterval(() => {this.getMessage(response.data.channel_name)}, 1000)
           this.polling;
 
@@ -234,6 +246,7 @@ export default {
 </script>
 
 <style>
+
 .messages-main {
   overflow-y: scroll;
   height: 90%;
@@ -263,9 +276,12 @@ export default {
 }
 .main-area {
   margin: 0px;
-  min-height: calc(100vh - 5em) !important;
+  min-height: calc(100vh - 5em) !important; 
 }
+
 .logged_user {
   color: white;
 }
+
+
 </style>
