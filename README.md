@@ -1,8 +1,4 @@
-# Swift--Chat-2
-
-Author: Dawoud Husain
-
-Date: Aug 25 - 2021-present
+# Swift--Chat
 
 Overview:
 
